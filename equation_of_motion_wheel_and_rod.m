@@ -44,10 +44,31 @@ L = simplify(L)
 
 syms Tr Tw
 eqn_th1 = functionalDerivative(L, th1) == Tr;
-simplify(eqn_th1);
+simplify(eqn_th1)
 eqn_th2 = functionalDerivative(L, th2) == Tw
 
 
 % ------- 線形化 ------%
-eqn_th1 = subs(eqn_th1, sin(th1), th1)
+% eqn_th1 = subs(eqn_th1, sin(th1), th1)
 
+% θについて解いてみる
+sol = dsolve(eqn_th1, th1(0) == 0.1, dth1(0) == 0)
+% texlabel(sol)
+
+% 解いたやつでシミュレーションしてみる
+t = 0 : 0.01 : 10;
+l_g = 0.1;
+m1 = 0.01; 
+I1 = 1*10^-3;
+g = -9.8;
+
+i = 0;
+for n = t
+    i = i + 1;
+%     x(i) = (exp(-(n*(g*l_g*m1*(m1*l_g^2 + I1))^(1/2))/(m1*l_g^2 + I1))*(exp((2*n*(g*l_g*m1*(m1*l_g^2 + I1))^(1/2))/(m1*l_g^2 + I1)) + 1))/2
+%     x(i) = (exp((n*(g*l_g*m1*(m1*l_g^2 + I1))^(1/2))/(m1*l_g^2 + I1))*(10*I1 + (g*l_g*m1*(m1*l_g^2 + I1))^(1/2) + 10*l_g^2*m1))/(2*(g*l_g*m1*(m1*l_g^2 + I1))^(1/2)) - (exp(-(n*(g*l_g*m1*(m1*l_g^2 + I1))^(1/2))/(m1*l_g^2 + I1))*(10*I1 - (g*l_g*m1*(m1*l_g^2 + I1))^(1/2) + 10*l_g^2*m1))/(2*(g*l_g*m1*(m1*l_g^2 + I1))^(1/2))
+
+
+end
+
+% plot(t, x)
