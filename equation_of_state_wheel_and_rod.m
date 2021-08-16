@@ -3,9 +3,9 @@ clear
 clf
 
 % parameters
-g = -9.80665; % [m/s^2] ホントは＋
+g = 9.80665; % [m/s^2] ホントは＋
 m1 = 0.1; % [kg]
-m2 = 0.1; % [kg]
+m2 = 1; % [kg]
 l_g = 0.05; % [m]
 l = l_g*2; % [m]
 r = 0.025; % [m]
@@ -14,31 +14,33 @@ I2 = (1/2) * m2 * r^2;
 c1 = 1 * 10^-2.5; % 粘性係数
 c2 = 1 * 10^-2.5; % フライホイールの粘性係数
 
-W = -1 / I2;
-X = c2 / I2;
-Y = ((m2*l + m1*l_g)*g) / (m1*l_g^2 + m2*l^2 + I1);
-Z = -c1 / (m1*l_g^2 + m2*l^2 + I1);
-V = I1 + I2;
+X = ((m2*l + m1*l_g)*g)/(m2*l^2 + m1*l_g^2 + I1);
+Y = 1 / (m2*l^2 + m1*l_g^2 + I1);
+Z = 1 / (m2*l^2 + m1*l_g^2 + I1);
+a = ((m2*l + m1*l_g)*g)/(m2*l^2 + m1*l_g^2 + I1);
+b = (m2*l^2 + m1*l_g^2 + I1 + I2)/(m2*l^2 + m1*l_g^2 + I1)*I2;
+g = 1 / (m2*l^2 + m1*l_g^2 + I1);
 
 % equation of state
-A = [0, 1, 0, 0;
-     Y, Z, 0, 0;
-     0, 0, 0, 1;
-     0, 0, 0, X];
-B = [0; V; 0; W];
-C = [1, 0, 1, 0];
+A = [0, 1, 0;
+    -X, 0, 0; % xは＋？
+    -a, 0, 0];
+B = [0;
+    -Y;
+    -b];
+C = [1, 0, 1];
 
 % 可制御　可観測
-Uc = [B, A*B, A^2*B, A^3*B];
+Uc = [B, A*B, A^2*B];
 det(Uc)
-Uo = [C; C*A; C*A^2; C*A^3];
+Uo = [C; C*A; C*A^2];
 det(Uo)
 
 dt = 0.001;
-t = 0 : dt : 5;
+t = 0 : dt : 1;
 i = 0;
-x = [0.1; 0; 0; 0];
-u = 0.00;
+x = [0.1; 0; 0];
+u = 0.1;
 x1 = [];
 x2 = [];
 x3 = [];
@@ -51,7 +53,7 @@ for n = t
     x1 = [x1, x(1)];
     x2 = [x2, x(2)];
     x3 = [x3, x(3)];
-    x4 = [x4, x(4)];
+%     x4 = [x4, x(4)];
 end
 
 figure(1)
@@ -67,9 +69,10 @@ subplot(2, 2, 3)
 plot(t, x3);
 legend('th_2')
 
-subplot(2, 2, 4)
-plot(t, x4);
-legend('dth_2')
+% subplot(2, 2, 4)
+% plot(t, x4);
+% legend('dth_2')
+
 
 % アニメーション
 figure(2)
@@ -78,10 +81,9 @@ ylim([-1 1])
 i = 0;
 for n = t
     i = i + 1;    
-    if rem(i, 20) == 0
+    if rem(i, 1) == 0
         x = [0 sin(x1(i))];
         y = [0 cos(x1(i))];
-%         plot([0 sin(x1(i))], [0 cos(x1(i))], '.b'); 
         g = line(x, y);
         drawnow;
         delete(g);
