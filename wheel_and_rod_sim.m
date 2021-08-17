@@ -1,0 +1,49 @@
+clear
+clc
+
+Tw = 0;
+g = 9.80665;
+l = 0.;
+m2 = 1;
+l_g = 0.05;
+m1 = 0.1;
+r = 0.025; % [m]
+I1 = (1/12) * m1 * (l)^2;
+I2 = (1/2) * m2 * r^2;
+c1 = 1*10^-3; % 粘性係数 1*10^-3
+c2 = 1*10^-3; % フライホイールの粘性係数
+
+dt = 0.001;
+t = 0 : dt : 1;
+i = 0;
+dth1 = 0;
+dth2 = 0;
+th1 = 0.1;
+th2 = 0;
+s_th1 = [];
+s_th2 = [];
+s_dth2 = [];
+for n = t
+    i = i + 1;
+    ddth1 = (Tw - c1*dth1 + c2*dth2 + g*sin(th1)*(l*m2 + l_g*m1))/(m2*l^2 + m1*l_g^2 + I1);
+    ddth2 = -(Tw - c1*dth1 + c2*dth2 + (I1*(Tw + c2*dth2))/I2 + g*sin(th1)*(l*m2 + l_g*m1) + (l^2*m2*(Tw + c2*dth2))/I2 + (l_g^2*m1*(Tw + c2*dth2))/I2)/(m2*l^2 + m1*l_g^2 + I1);
+
+    dth1 = dth1 + ddth1 * dt;
+    dth2 = dth2 + ddth2 * dt;
+    
+    th1 = th1 + dth1 * dt;
+    th2 = th2 + dth2 * dt;
+    
+    s_th1 = [s_th1 th1];
+    s_th2 = [s_th2 th2];
+    s_dth2 = [s_dth2 dth2];
+end
+
+figure(1)
+plot(t, s_th1)
+
+figure(2)
+plot(t, s_th2)
+
+figure(3)
+plot(t, s_dth2)
