@@ -24,6 +24,7 @@ Tw = 0;
 
 s_th1 = [];
 s_th2 = [];
+s_dth1 = [];
 s_dth2 = [];
 for n = t
     i = i + 1;
@@ -45,14 +46,27 @@ for n = t
     
     s_th1 = [s_th1 th1];
     s_th2 = [s_th2 th2];
+    s_dth1 = [s_dth1 dth1];
     s_dth2 = [s_dth2 dth2];
 end
 
 figure(1)
+subplot(2, 2, 1)
 plot(t, s_th1)
+legend('th1')
+title('運動方程式のシミュレーション')
 
-figure(2)
+subplot(2, 2, 2)
 plot(t, s_th2)
+legend('th2')
+title('運動方程式のシミュレーション')
 
-figure(3)
+subplot(2, 2, 3)
+plot(t, s_dth1)
+legend('dth2')
+title('運動方程式のシミュレーション')
+
+subplot(2, 2, 4)
 plot(t, s_dth2)
+legend('dth2')
+title('運動方程式のシミュレーション')

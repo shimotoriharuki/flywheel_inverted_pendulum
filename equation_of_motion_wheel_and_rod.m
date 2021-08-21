@@ -63,3 +63,6 @@ eqn_ddth2 = isolate(eqn_ddth2, diff(th2(t), t, t)) % ddth2について解く
 eqn_ddth1_linear = subs(eqn_ddth1, sin(th1), th1)
 eqn_ddth2_linear = subs(eqn_ddth2, sin(th1), th1)
 
+latex(eqn_ddth1_linear)
+latex(eqn_ddth2_linear)
+
